@@ -46,4 +46,22 @@ const createUser = async (req, res) => {
   }
 };
 
-module.exports = { getUserData, createUser };
+//WARNING: WILL CLEAR ALL THE DATA IN THE DATABASE
+const deleteUsers = async (req, res) => {
+  try {
+    await user.deleteMany({});
+
+    res.status(200).json({
+      status: true,
+      message: "Successfully cleared the db",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      status: false,
+      message: "An error ocurred while deleting users",
+    });
+  }
+};
+
+module.exports = { getUserData, createUser, deleteUsers };
