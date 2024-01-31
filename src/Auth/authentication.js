@@ -108,7 +108,7 @@ class AuthenticationStrategy {
 
             if (userExist) {
               //Respond with
-              res
+              return res
                 .status(400)
                 .json({ status: false, message: "User Already Exists" });
             }
@@ -155,7 +155,7 @@ class AuthenticationStrategy {
             //If user doesn't
             if (!user) {
               //Respond with
-              res
+              return res
                 .status(404)
                 .json({ status: false, message: "User Not Found" });
             }
@@ -164,7 +164,7 @@ class AuthenticationStrategy {
             const validate = user.isValidPassword(password);
 
             if (!validate) {
-              res
+              return res
                 .status(401)
                 .json({ status: false, message: "Wrong Email or Password" });
             }
