@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const bcrypt = require("bcrypt");
+
 const schema = mongoose.Schema;
 
 const userSchema = new schema({
@@ -27,6 +29,19 @@ const userSchema = new schema({
     default: Date.now(),
   },
 });
+
+// HASH PASSWORDS, THEN STORE IN DB
+userSchema.pre("save", async function () {
+  this.password = await bcrypt.hash(this.password, 12);
+});
+
+//CHECK IF USER"S PASSWORD IS VALID
+userSchema.methods.isValidPassword = async function (password) {
+  const user = this;
+  const compare = await bcrypt.compare(password, user.password);
+
+  return compare;
+};
 
 const userModel = mongoose.model("Users", userSchema);
 
