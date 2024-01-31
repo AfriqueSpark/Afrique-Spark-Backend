@@ -1,8 +1,8 @@
-const userModel = require("../models/user.model");
+const user = require("../models/user.model");
 
 const getUserData = async (req, res) => {
   try {
-    const userData = await userModel.find({});
+    const userData = await user.find({});
 
     res.status(200).json({
       status: true,
@@ -11,7 +11,10 @@ const getUserData = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.status(500).json("An error occurred while fetching users");
+    res.status(500).json({
+      status: false,
+      message: "An error occurred while fetching users",
+    });
   }
 };
 
@@ -25,7 +28,7 @@ const createUser = async (req, res) => {
         .json({ status: false, message: "No email or password provided" });
     }
 
-    const user = new userModel({ email, password });
+    const user = new user({ email, password });
 
     await user.save();
 
