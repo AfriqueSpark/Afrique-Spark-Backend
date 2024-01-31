@@ -6,14 +6,15 @@
   "license": "ISC",
   "description": "",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "dev": "cross-env NODE_ENV=development nodemon src/server.js",
+    "start": "cross-env NODE_ENV=production node src/server.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "colors": "^1.4.0",
     "compression": "^1.7.4",
     "connect-redis": "^7.1.0",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "express-mongo-sanitize": "^2.2.0",
