@@ -14,6 +14,7 @@ const checkApiVersion = require("./middlewares/checkApiVersion.middleware");
 const { userRoute } = require("./routes/user.route");
 const logger = require("./utils/logger");
 const authRoute = require("./routes/Auth/auth.route");
+const isAuthenticated = require("./middlewares/checkAuthentication");
 
 const app = express();
 
@@ -69,7 +70,7 @@ app.use(logger());
 app.get("/api/v:version", checkApiVersion, welcomeToApi);
 
 //USER'S ROUTES
-app.use("/api/v:version/users", checkApiVersion, userRoute);
+app.use("/api/v:version/users", checkApiVersion, isAuthenticated, userRoute);
 
 //AUTH ROUTES
 app.use("/api/v:version/auth", checkApiVersion, authRoute);
