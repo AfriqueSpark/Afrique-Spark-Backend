@@ -1,5 +1,5 @@
 const dotenv = require("dotenv");
-const app = require("./app");
+const { app, redisClient } = require("./app");
 const mongoose = require("mongoose");
 
 dotenv.config();
@@ -13,8 +13,15 @@ mongoose
     console.log(err);
   });
 
+// //Log success message when redis connects
+redisClient.on("ready", function () {
+  console.log(">".cyan, "Successfully connected to Redis.");
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`listening on http://localhost:${PORT}/api/v1`);
 });
+
+module.exports = redisClient;
