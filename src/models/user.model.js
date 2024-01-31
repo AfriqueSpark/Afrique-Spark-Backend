@@ -15,6 +15,10 @@ const userSchema = new schema({
     type: String,
     required: [true, "A password must be provided"],
   },
+  username: {
+    type: String,
+    default: "Anonymous",
+  },
   role: {
     type: String,
     enum: ["user", "model", "fashion-designers"],
