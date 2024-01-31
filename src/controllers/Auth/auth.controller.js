@@ -8,6 +8,39 @@ dotenv.config();
 //passport authentication strategies
 new AuthenticationStrategy();
 
+//Controller for google signup/signIn route
+function handleGoogle(req, res, next) {
+  passport.authenticate("google", {
+    scope: ["email", "profile"],
+  })(req, res, next);
+}
+
+// controller for google redirect
+function handleGoogleRedirect(req, res, next) {
+  passport.authenticate("google", {
+    successRedirect: "redirect/success",
+    failureRedirect: "redirect/failure",
+  })(req, res, next);
+}
+
+// controller for google success redirect
+function handleGoogleSuccessRedirect(req, res) {
+  const { user } = req;
+  res.status(201).json({
+    success: true,
+    message: "Successfully signed in with Google.",
+    payload: { user: user },
+  });
+}
+
+// controller for google failure redirect
+function handleGoogleFailureRedirect(req, res) {
+  res.status(401).json({
+    success: false,
+    message: "Unable to sign in with Google.",
+  });
+}
+
 //Controller for signup route
 function handlePasswordSignUp(req, res, next) {
   //Validate request body
@@ -80,13 +113,15 @@ function handleSignOut(req, res) {
     }
   });
 
-  processLogger("Successfully signed user out.");
-
   res.clearCookie("connect.sid");
   res.redirect("/api/v1");
 }
 
 module.exports = {
+  handleGoogle,
+  handleGoogleRedirect,
+  handleGoogleSuccessRedirect,
+  handleGoogleFailureRedirect,
   handlePasswordSignUp,
   handlePasswordSignUpRedirect,
   handlePasswordSignIn,
