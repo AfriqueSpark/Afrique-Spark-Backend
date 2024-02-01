@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <header><h1>DASHBOARD</h1></header>
+    <main>
+      <h2 id="email"></h2>
+      <h3 id="username"></h3>
+    </main>
+    <script>
+      let email = document.getElementById("email");
+      let username = document.getElementById("username");
+
+      async function getUserData() {
+        await fetch(
+          "http://localhost:8080/api/v1/auth/google/redirect/success",
+          {
+            method: "GET",
+          }
+        )
+          .then(async (data) => {
+            const userData = await data.json();
+
+            email.textContent = `YOUR EMAIL IS ${userData["payload"].user["email"]}`;
+            username.textContent = `WELCOME ${userData["payload"].user["username"]}`;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      getUserData();
+    </script>
+  </body>
+</html>
