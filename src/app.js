@@ -4,6 +4,7 @@ const compression = require("compression");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const { v4: uuidv4 } = require("uuid");
+const cors = require("cors");
 
 const session = require("express-session");
 const RedisStore = require("connect-redis").default;
@@ -19,6 +20,13 @@ const isAuthenticated = require("./middlewares/checkAuthentication");
 const app = express();
 
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    methods: "GET,POST,PUT,DELETE,OPTIONS",
+  })
+);
 
 //Redis connection client
 const redisClient = redis.createClient({ url: process.env.REDIS_URL });
