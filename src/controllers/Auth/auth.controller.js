@@ -11,33 +11,18 @@ new AuthenticationStrategy();
 //Controller for google signup/signIn route
 function handleGoogle(req, res, next) {
   passport.authenticate("google", {
-    scope: ["email", "profile"],
+    successRedirect: "google/redirect/success",
   })(req, res, next);
 }
 
 // controller for google redirect
-function handleGoogleRedirect(req, res, next) {
-  passport.authenticate("google", {
-    successRedirect: "redirect/success",
-    failureRedirect: "redirect/failure",
-  })(req, res, next);
-}
-
-// controller for google success redirect
-function handleGoogleSuccessRedirect(req, res) {
+function handleGoogleRedirect(req, res) {
   const { user } = req;
+
   res.status(201).json({
     success: true,
     message: "Successfully signed in with Google.",
     payload: { user: user },
-  });
-}
-
-// controller for google failure redirect
-function handleGoogleFailureRedirect(req, res) {
-  res.status(401).json({
-    success: false,
-    message: "Unable to sign in with Google.",
   });
 }
 
@@ -120,11 +105,10 @@ function handleSignOut(req, res) {
 module.exports = {
   handleGoogle,
   handleGoogleRedirect,
-  handleGoogleSuccessRedirect,
-  handleGoogleFailureRedirect,
   handlePasswordSignUp,
   handlePasswordSignUpRedirect,
   handlePasswordSignIn,
   handlePasswordSignInRedirect,
   handleSignOut,
 };
+
