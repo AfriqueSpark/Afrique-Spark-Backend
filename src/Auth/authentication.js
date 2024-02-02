@@ -104,10 +104,10 @@ class AuthenticationStrategy {
           passReqToCallback: true,
         },
         async (req, email, password, done) => {
-          //Get response object from request body
-          const res = req.res;
-
           try {
+            //Get response object from request body
+            const res = req.res;
+
             //Check if user exists
             const userExist = await userModel.exists({ email });
 
@@ -128,6 +128,8 @@ class AuthenticationStrategy {
 
             return done(null, savedUser);
           } catch (err) {
+            //Get response object from request body
+            const res = req.res;
             console.log(err);
 
             res.status(500).json({
@@ -150,10 +152,10 @@ class AuthenticationStrategy {
           passReqToCallback: true,
         },
         async (req, email, password, done) => {
-          //Get response object from request body
-          const res = req.res;
-
           try {
+            //Get response object from request body
+            const res = req.res;
+
             //Check if user exists
             const user = await userModel.findOne({ email });
 
@@ -176,8 +178,13 @@ class AuthenticationStrategy {
 
             console.log("User signed in");
 
+            console.log(user);
+
             return done(null, user);
           } catch (err) {
+            //Get response object from request body
+            const res = req.res;
+
             console.log(err);
             res.status(500).json({
               status: false,
