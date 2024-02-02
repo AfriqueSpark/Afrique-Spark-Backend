@@ -21,10 +21,13 @@ const app = express();
 
 app.use(express.json());
 
+app.use(express.urlencoded({ extended: true }));
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
-    methods: "GET,POST,PUT,DELETE,OPTIONS",
+    origin: ["http://127.0.0.1:5500", "http://localhost:5500"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
   })
 );
 
@@ -50,15 +53,18 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: false,
+      httpOnly: true,
       maxAge: 48 * 60 * 60 * 1000, // expires in two-days
-      secure: false,
+      secure: process.env.NODE_ENV === "development" ? false : true,
+      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
     },
   })
 );
 
 //For setting secure headers
 app.use(helmet());
+
+app.use(passport.authenticate("session"));
 
 //Initialize Passport
 app.use(passport.initialize());
@@ -77,11 +83,11 @@ app.use(logger());
 
 app.get("/api/v:version", checkApiVersion, welcomeToApi);
 
-//USER'S ROUTES
-app.use("/api/v:version/users", checkApiVersion, isAuthenticated, userRoute);
-
 //AUTH ROUTES
 app.use("/api/v:version/auth", checkApiVersion, authRoute);
+
+//USER'S ROUTES
+app.use("/api/v:version/users", checkApiVersion, isAuthenticated, userRoute);
 
 app.all("*", (_, res) => {
   res.status(404).json({
