@@ -8,30 +8,43 @@
     <main>
       <h2 id="email"></h2>
       <h3 id="username"></h3>
+      <h2>This are afrique spark users</h2>
+      <p id="users"></p>
     </main>
     <script>
       let email = document.getElementById("email");
       let username = document.getElementById("username");
+      let users = document.getElementById("users");
 
-      async function getUserData() {
-        await fetch(
-          "http://localhost:8080/api/v1/auth/google/redirect/success",
-          {
-            method: "GET",
-          }
-        )
-          .then(async (data) => {
-            const userData = await data.json();
+      const user = JSON.parse(localStorage.getItem("user"));
 
-            email.textContent = `YOUR EMAIL IS ${userData["payload"].user["email"]}`;
-            username.textContent = `WELCOME ${userData["payload"].user["username"]}`;
+      email.textContent = `YOUR EMAIL IS ${user["payload"].user["email"]}`;
+      username.textContent = `WELCOME ${user["payload"].user["username"]}`;
+
+      const URL = "http://localhost:8000/api/v1/users";
+      async function getUsers() {
+        await axios({
+          method: "get",
+          url: URL,
+          withCredentials: true,
+        })
+          .then((data) => {
+            // const userData = await data.json();
+
+            console.log(data);
+
+            if (data.status === 200) {
+              users.textContent = data["data"];
+            } else {
+              users.textContent = data["message"];
+            }
           })
           .catch((err) => {
             console.log(err);
           });
       }
 
-      getUserData();
+      getUsers();
     </script>
   </body>
 </html>
