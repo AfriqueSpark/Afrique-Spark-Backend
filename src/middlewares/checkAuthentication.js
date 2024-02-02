@@ -1,11 +1,11 @@
 const isAuthenticated = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    res
+    return res
       .status(401)
       .json({ message: "Unauthorized request made to this endpoint." });
   }
 
-  return next();
+ next();
 };
 
 module.exports = isAuthenticated;
