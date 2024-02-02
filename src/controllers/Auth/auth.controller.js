@@ -49,8 +49,9 @@ function handlePasswordSignUp(req, res, next) {
 //Controller for signup redirect
 function handlePasswordSignUpRedirect(req, res) {
   const { user } = req;
-  res.status(200).json({
-    message: "Signup successful",
+
+  res.status(201).json({
+    message: "user registered  successfully",
     success: true,
     payload: { user: user },
   });
@@ -70,7 +71,6 @@ function handlePasswordSignIn(req, res, next) {
   }
 
   const redirectUrl = `${process.env.BASE_URL}/api/v1/auth/sign-in/redirect`;
-
   return passport.authenticate("signIn", {
     successRedirect: `${redirectUrl}/success`,
   })(req, res, next);
@@ -79,8 +79,11 @@ function handlePasswordSignIn(req, res, next) {
 //Controller for signIn redirect
 function handlePasswordSignInRedirect(req, res) {
   const { user } = req;
+
+  console.log(user);
+
   res.status(200).json({
-    message: "SignIn successful",
+    message: "Signed in successfully",
     success: true,
     payload: { user: user },
   });
@@ -111,4 +114,3 @@ module.exports = {
   handlePasswordSignInRedirect,
   handleSignOut,
 };
-
