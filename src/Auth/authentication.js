@@ -72,8 +72,10 @@ class AuthenticationStrategy {
 
           //create a new user
           let newUser = {
+            fullname: name,
             email: email,
             password: sub,
+            passwordConfirm: sub,
             username: name,
           };
 
@@ -108,6 +110,8 @@ class AuthenticationStrategy {
             //Get response object from request body
             const res = req.res;
 
+            const { fullname, passwordConfirm } = req.body;
+
             //Check if user exists
             const userExist = await userModel.exists({ email });
 
@@ -118,8 +122,15 @@ class AuthenticationStrategy {
                 .json({ status: false, message: "User Already Exists" });
             }
 
+            //If password doesn't match
+            if (password !== passwordConfirm) {
+              return res
+                .status(401)
+                .json({ status: false, message: "Password not the same" });
+            }
+
             //Construct user data
-            const newUser = { email, password };
+            const newUser = { fullname, email, password, passwordConfirm };
 
             //Save user to db
             const savedUser = await new userModel(newUser).save();
