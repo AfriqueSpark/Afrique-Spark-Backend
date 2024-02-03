@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <header><h1>DASHBOARD</h1></header>
+    <main>
+      <h2 id="email"></h2>
+      <h3 id="username"></h3>
+      <h2>This are afrique spark users</h2>
+      <p id="users"></p>
+    </main>
+    <script>
+      let email = document.getElementById("email");
+      let username = document.getElementById("username");
+      let users = document.getElementById("users");
+
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      email.textContent = `YOUR EMAIL IS ${user["payload"].user["email"]}`;
+      username.textContent = `WELCOME ${user["payload"].user["username"]}`;
+
+      const URL = "http://localhost:8000/api/v1/users";
+      async function getUsers() {
+        await axios({
+          method: "get",
+          url: URL,
+          withCredentials: true,
+        })
+          .then((data) => {
+            // const userData = await data.json();
+
+            console.log(data);
+
+            if (data.status === 200) {
+              users.textContent = data["data"];
+            } else {
+              users.textContent = data["message"];
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      getUsers();
+    </script>
+  </body>
+</html>
