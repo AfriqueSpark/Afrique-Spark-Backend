@@ -66,6 +66,9 @@ class AuthenticationStrategy {
 
           //If a user already exists
           if (user) {
+            // Remove password from output
+            user.password = undefined;
+
             //Sign user in
             return done(null, user);
           }
@@ -81,6 +84,9 @@ class AuthenticationStrategy {
 
           //Save user to DB
           const savedUser = await new userModel(newUser).save();
+
+          // Remove password from output
+          savedUser.password = undefined;
 
           console.log("user signed in with google");
 
@@ -135,6 +141,9 @@ class AuthenticationStrategy {
             //Save user to db
             const savedUser = await new userModel(newUser).save();
 
+            // Remove password from output
+            savedUser.password = undefined;
+
             console.log("user signed up");
 
             return done(null, savedUser);
@@ -167,8 +176,8 @@ class AuthenticationStrategy {
             //Get response object from request body
             const res = req.res;
 
-            //Check if user exists
-            const user = await userModel.findOne({ email });
+            //Check if user exists and include password with it
+            const user = await userModel.findOne({ email }).select("+password");
 
             //If user doesn't
             if (!user) {
@@ -186,6 +195,9 @@ class AuthenticationStrategy {
                 .status(401)
                 .json({ status: false, message: "Wrong Email or Password" });
             }
+
+            // Remove password from output
+            user.password = undefined;
 
             console.log("User signed in");
 

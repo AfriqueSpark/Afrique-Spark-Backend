@@ -1,6 +1,9 @@
 const dotenv = require("dotenv");
 const passport = require("passport");
-const validateEmailPasswordInput = require("../../utils/validateUserInput");
+const {
+  validateEmailPasswordInput,
+  validateSignUpInput,
+} = require("../../utils/validateUserInput");
 const AuthenticationStrategy = require("../../Auth/authentication");
 
 dotenv.config();
@@ -29,7 +32,7 @@ function handleGoogleRedirect(req, res) {
 //Controller for signup route
 function handlePasswordSignUp(req, res, next) {
   //Validate request body
-  const { error } = validateEmailPasswordInput(req.body);
+  const { error } = validateSignUpInput(req.body);
 
   if (error) {
     const errorMessage = error.details[0].message.replace(/"/g, ""); // strip out quotes
@@ -49,6 +52,8 @@ function handlePasswordSignUp(req, res, next) {
 //Controller for signup redirect
 function handlePasswordSignUpRedirect(req, res) {
   const { user } = req;
+
+  console.log(user);
 
   res.status(201).json({
     message: "user registered  successfully",
@@ -79,6 +84,8 @@ function handlePasswordSignIn(req, res, next) {
 //Controller for signIn redirect
 function handlePasswordSignInRedirect(req, res) {
   const { user } = req;
+
+  console.log(user);
 
   res.status(200).json({
     message: "Signed in successfully",
