@@ -16,6 +16,7 @@ const { userRoute } = require("./routes/user.route");
 const logger = require("./utils/logger");
 const authRoute = require("./routes/Auth/auth.route");
 const isAuthenticated = require("./middlewares/checkAuthentication");
+const globalErrorMiddlware = require("./middlewares/error/global.error.middleware");
 
 const app = express();
 
@@ -85,6 +86,9 @@ app.get("/api/v:version", checkApiVersion, welcomeToApi);
 
 //AUTH ROUTES
 app.use("/api/v:version/auth", checkApiVersion, authRoute);
+
+//GLOBAL ERROR HANDLER MIDDLEWARE
+app.use(globalErrorMiddlware);
 
 //USER'S ROUTES
 app.use("/api/v:version/users", checkApiVersion, isAuthenticated, userRoute);
