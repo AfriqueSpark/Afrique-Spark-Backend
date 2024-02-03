@@ -100,7 +100,9 @@ function handleSignOut(req, res) {
   });
 
   res.clearCookie("connect.sid");
-  res.redirect("/api/v1");
+  res
+    .status(200)
+    .json({ success: true, message: "User Signed out successfully" });
 }
 
 module.exports = {
