@@ -20,8 +20,10 @@ redisClient.on("ready", function () {
 
 const PORT = process.env.PORT || 3000;
 
+const DOMAIN = process.env.DOMAIN;
+
 app.listen(PORT, () => {
-  console.log(">".red, `listening on http://localhost:${PORT}/api/v1`);
+  console.log(">".red, `listening on ${DOMAIN}:${PORT}/api/v1`);
 });
 
 module.exports = redisClient;
