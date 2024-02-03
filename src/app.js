@@ -87,8 +87,7 @@ app.get("/api/v:version", checkApiVersion, welcomeToApi);
 //AUTH ROUTES
 app.use("/api/v:version/auth", checkApiVersion, authRoute);
 
-//GLOBAL ERROR HANDLER MIDDLEWARE
-app.use(globalErrorMiddlware);
+
 
 //USER'S ROUTES
 app.use("/api/v:version/users", checkApiVersion, isAuthenticated, userRoute);
@@ -99,5 +98,8 @@ app.all("*", (_, res) => {
     success: false,
   });
 });
+
+//GLOBAL ERROR HANDLER MIDDLEWARE
+app.use(globalErrorMiddlware);
 
 module.exports = { app, redisClient };
