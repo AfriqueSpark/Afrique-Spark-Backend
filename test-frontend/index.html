@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Afrique Spark</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <h2>SIGN IN YOUR ACCOUNT</h2>
+      <h3 id="error"></h3>
+      <form id="form">
+        <label for="Email">EMAIL</label>
+        <input type="email" name="Email" id="user-email" required />
+        <br />
+        <br />
+        <label for="password">PASSWORD</label>
+        <input type="password" name="password" id="user-password" required />
+        <br />
+        <input type="submit" id="submit" />
+      </form>
+      <br />
+      <button
+        style="height: 30px; border-radius: 3px; border: 2px solid cadetblue"
+        id="loginBtn"
+      >
+        <a
+          style="
+            text-decoration: none;
+            font-family: sans-serif;
+            font-weight: bold;
+            color: cadetblue;
+          "
+          href="http://localhost:8000/api/v1/auth/google/"
+          target="_self"
+          >SIGN UP WITH GOOGLE</a
+        >
+      </button>
+    </main>
+    <script>
+      let error = document.getElementById("error");
+      let loginBtn = document.getElementById("form");
+      const email = document.getElementById("user-email");
+      const password = document.getElementById("user-password");
+
+      const URL = "http://localhost:8000/api/v1/auth/sign-in";
+
+      // const data = JSON.stringify({
+      //   ,
+      // });
+
+      async function signup() {
+        await axios({
+          method: "post",
+          url: URL,
+          withCredentials: true,
+          data: {
+            email: `${email.value}`,
+            password: `${password.value}`,
+          },
+        })
+          .then((data) => {
+            // const userData = await data.json();
+
+            console.log(data);
+
+            if (data.status === 200) {
+              localStorage.setItem(
+                "user",
+                JSON.stringify(data["data"].payload["user"])
+              );
+              window.location.href =
+                "http://127.0.0.1:5500/test-frontend/dashboard.html";
+            } else {
+              error.textContent = data["message"];
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      loginBtn.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        signup();
+      });
+    </script>
+  </body>
+</html>
