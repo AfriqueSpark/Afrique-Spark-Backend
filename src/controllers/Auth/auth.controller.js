@@ -80,8 +80,6 @@ function handlePasswordSignIn(req, res, next) {
 function handlePasswordSignInRedirect(req, res) {
   const { user } = req;
 
-  console.log(user);
-
   res.status(200).json({
     message: "Signed in successfully",
     success: true,
