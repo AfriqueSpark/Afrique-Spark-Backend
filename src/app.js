@@ -56,7 +56,7 @@ app.use(
     cookie: {
       httpOnly: true,
       maxAge: 48 * 60 * 60 * 1000, // expires in two-days
-      secure: process.env.NODE_ENV === "development" ? false : true,
+      secure: "auto",
       sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
     },
   })
@@ -86,8 +86,6 @@ app.get("/api/v:version", checkApiVersion, welcomeToApi);
 
 //AUTH ROUTES
 app.use("/api/v:version/auth", checkApiVersion, authRoute);
-
-
 
 //USER'S ROUTES
 app.use("/api/v:version/users", checkApiVersion, isAuthenticated, userRoute);
