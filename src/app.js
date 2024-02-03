@@ -4,6 +4,7 @@ const compression = require("compression");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const { v4: uuidv4 } = require("uuid");
+const cors = require("cors");
 
 const session = require("express-session");
 const RedisStore = require("connect-redis").default;
@@ -20,6 +21,16 @@ const globalErrorMiddlware = require("./middlewares/error/global.error.middlewar
 const app = express();
 
 app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  cors({
+    origin: ["http://127.0.0.1:5500", "http://localhost:5500"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
 
 //Redis connection client
 const redisClient = redis.createClient({ url: process.env.REDIS_URL });
@@ -43,15 +54,18 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: false,
+      httpOnly: true,
       maxAge: 48 * 60 * 60 * 1000, // expires in two-days
-      secure: false,
+      secure: process.env.NODE_ENV === "development" ? false : true,
+      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
     },
   })
 );
 
 //For setting secure headers
 app.use(helmet());
+
+app.use(passport.authenticate("session"));
 
 //Initialize Passport
 app.use(passport.initialize());
@@ -70,14 +84,14 @@ app.use(logger());
 
 app.get("/api/v:version", checkApiVersion, welcomeToApi);
 
-//USER'S ROUTES
-app.use("/api/v:version/users", checkApiVersion, isAuthenticated, userRoute);
-
 //AUTH ROUTES
 app.use("/api/v:version/auth", checkApiVersion, authRoute);
 
 //GLOBAL ERROR HANDLER MIDDLEWARE
 app.use(globalErrorMiddlware);
+
+//USER'S ROUTES
+app.use("/api/v:version/users", checkApiVersion, isAuthenticated, userRoute);
 
 app.all("*", (_, res) => {
   res.status(404).json({

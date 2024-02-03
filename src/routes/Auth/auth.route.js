@@ -8,17 +8,13 @@ const {
   handleSignOut,
   handleGoogle,
   handleGoogleRedirect,
-  handleGoogleSuccessRedirect,
-  handleGoogleFailureRedirect,
 } = require("../../controllers/Auth/auth.controller");
 
 const authRoute = express.Router();
 
 // HANDLE GOOGLE SIGN-UP/SIGN-IN REQUESTS
-authRoute.route("/google").get(handleGoogle);
-authRoute.route("/google/redirect").get(handleGoogleRedirect);
-authRoute.route("/google/redirect/success").get(handleGoogleSuccessRedirect);
-authRoute.route("/google/redirect/failure").get(handleGoogleFailureRedirect);
+authRoute.route("/google").post(handleGoogle);
+authRoute.route("/google/redirect/success").get(handleGoogleRedirect);
 
 // HANDLE SIGN-UP REQUESTS
 authRoute.route("/sign-up").post(handlePasswordSignUp);

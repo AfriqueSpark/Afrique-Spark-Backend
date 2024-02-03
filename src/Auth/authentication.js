@@ -2,7 +2,10 @@ const passport = require("passport");
 const dotenv = require("dotenv");
 
 const LocalStrategy = require("passport-local").Strategy;
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const GoogleStrategy = require("passport-custom").Strategy;
+const { OAuth2Client } = require("google-auth-library");
+//Google client id
+const client = new OAuth2Client();
 
 const userModel = require("../models/user.model");
 
@@ -32,60 +35,62 @@ class AuthenticationStrategy {
 
   google() {
     passport.use(
-      new GoogleStrategy(
-        {
-          clientID: process.env.CLIENT_ID,
-          clientSecret: process.env.CLIENT_SECRET,
-          callbackURL: `${process.env.BASE_URL}/api/v1/auth/google/redirect`,
-          passReqToCallback: true,
-        },
-        async (request, accessToken, refreshToken, profile, done) => {
-          //Get response object from request object
-          const res = request.res;
+      "google",
+      new GoogleStrategy(async (request, done) => {
+        //Get response object from request object
+        const res = request.res;
 
-          try {
-            const email = (await profile.emails)
-              ? profile.emails[0].value
-              : null;
+        try {
+          const { token } = request.body;
 
-            // If an email was not returned by Google
-            if (!email) {
-              return res.status(500).json({
-                success: false,
-                message: "Internal server error, email not returned by Google.",
-              });
-            }
+          console.log(token);
 
-            const user = await userModel.findOne({ email });
+          const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.CLIENT_ID,
+          });
 
-            //If a user already exists
-            if (user) {
-              //Sign user in
-              return done(null, user);
-            }
+          const { sub, name, email } = ticket.getPayload();
 
-            //create a new user
-            let newUser = {
-              email: email,
-              password: profile.id,
-              username: profile.displayName,
-            };
+          console.log("The profile is:", sub);
 
-            //Save user to DB
-            const savedUser = await new userModel(newUser).save();
-
-            console.log("user signed in with google");
-
-            return done(null, savedUser);
-          } catch (err) {
-            console.log(err);
+          // If an email was not returned by Google
+          if (!email) {
             return res.status(500).json({
               success: false,
-              message: "An error occurred while signing user in",
+              message: "Internal server error, email not returned by Google.",
             });
           }
+
+          const user = await userModel.findOne({ email });
+
+          //If a user already exists
+          if (user) {
+            //Sign user in
+            return done(null, user);
+          }
+
+          //create a new user
+          let newUser = {
+            email: email,
+            password: sub,
+            username: name,
+          };
+
+          //Save user to DB
+          const savedUser = await new userModel(newUser).save();
+
+          console.log("user signed in with google");
+
+          return done(null, savedUser);
+        } catch (err) {
+          console.log(err);
+          return res.status(500).json({
+            success: false,
+            message: "An error occurred while signing user in",
+          });
         }
-      )
+      })
     );
   }
 
@@ -99,16 +104,16 @@ class AuthenticationStrategy {
           passReqToCallback: true,
         },
         async (req, email, password, done) => {
-          //Get response object from request body
-          const res = req.res;
-
           try {
+            //Get response object from request body
+            const res = req.res;
+
             //Check if user exists
             const userExist = await userModel.exists({ email });
 
             if (userExist) {
               //Respond with
-              res
+              return res
                 .status(400)
                 .json({ status: false, message: "User Already Exists" });
             }
@@ -123,6 +128,8 @@ class AuthenticationStrategy {
 
             return done(null, savedUser);
           } catch (err) {
+            //Get response object from request body
+            const res = req.res;
             console.log(err);
 
             res.status(500).json({
@@ -145,17 +152,17 @@ class AuthenticationStrategy {
           passReqToCallback: true,
         },
         async (req, email, password, done) => {
-          //Get response object from request body
-          const res = req.res;
-
           try {
+            //Get response object from request body
+            const res = req.res;
+
             //Check if user exists
             const user = await userModel.findOne({ email });
 
             //If user doesn't
             if (!user) {
               //Respond with
-              res
+              return res
                 .status(404)
                 .json({ status: false, message: "User Not Found" });
             }
@@ -164,15 +171,20 @@ class AuthenticationStrategy {
             const validate = user.isValidPassword(password);
 
             if (!validate) {
-              res
+              return res
                 .status(401)
                 .json({ status: false, message: "Wrong Email or Password" });
             }
 
             console.log("User signed in");
 
+            console.log(user);
+
             return done(null, user);
           } catch (err) {
+            //Get response object from request body
+            const res = req.res;
+
             console.log(err);
             res.status(500).json({
               status: false,

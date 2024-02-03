@@ -11,33 +11,18 @@ new AuthenticationStrategy();
 //Controller for google signup/signIn route
 function handleGoogle(req, res, next) {
   passport.authenticate("google", {
-    scope: ["email", "profile"],
+    successRedirect: "google/redirect/success",
   })(req, res, next);
 }
 
 // controller for google redirect
-function handleGoogleRedirect(req, res, next) {
-  passport.authenticate("google", {
-    successRedirect: "redirect/success",
-    failureRedirect: "redirect/failure",
-  })(req, res, next);
-}
-
-// controller for google success redirect
-function handleGoogleSuccessRedirect(req, res) {
+function handleGoogleRedirect(req, res) {
   const { user } = req;
+
   res.status(201).json({
     success: true,
     message: "Successfully signed in with Google.",
     payload: { user: user },
-  });
-}
-
-// controller for google failure redirect
-function handleGoogleFailureRedirect(req, res) {
-  res.status(401).json({
-    success: false,
-    message: "Unable to sign in with Google.",
   });
 }
 
@@ -64,8 +49,9 @@ function handlePasswordSignUp(req, res, next) {
 //Controller for signup redirect
 function handlePasswordSignUpRedirect(req, res) {
   const { user } = req;
-  res.status(200).json({
-    message: "Signup successful",
+
+  res.status(201).json({
+    message: "user registered  successfully",
     success: true,
     payload: { user: user },
   });
@@ -85,7 +71,6 @@ function handlePasswordSignIn(req, res, next) {
   }
 
   const redirectUrl = `${process.env.BASE_URL}/api/v1/auth/sign-in/redirect`;
-
   return passport.authenticate("signIn", {
     successRedirect: `${redirectUrl}/success`,
   })(req, res, next);
@@ -94,8 +79,11 @@ function handlePasswordSignIn(req, res, next) {
 //Controller for signIn redirect
 function handlePasswordSignInRedirect(req, res) {
   const { user } = req;
+
+  console.log(user);
+
   res.status(200).json({
-    message: "SignIn successful",
+    message: "Signed in successfully",
     success: true,
     payload: { user: user },
   });
@@ -120,8 +108,6 @@ function handleSignOut(req, res) {
 module.exports = {
   handleGoogle,
   handleGoogleRedirect,
-  handleGoogleSuccessRedirect,
-  handleGoogleFailureRedirect,
   handlePasswordSignUp,
   handlePasswordSignUpRedirect,
   handlePasswordSignIn,
