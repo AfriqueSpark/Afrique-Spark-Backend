@@ -114,7 +114,7 @@ class AuthenticationStrategy {
             if (userExist) {
               //Respond with
               return res
-                .status(400)
+                .status(401)
                 .json({ status: false, message: "User Already Exists" });
             }
 
