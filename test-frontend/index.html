@@ -42,7 +42,7 @@
       const email = document.getElementById("user-email");
       const password = document.getElementById("user-password");
 
-      const URL = "http://localhost:8000/api/v1/auth/sign-in";
+      const URL = "https://afriquespark.onrender.com/api/v1/auth/sign-in";
 
       // const data = JSON.stringify({
       //   ,
@@ -64,12 +64,13 @@
             console.log(data);
 
             if (data.status === 200) {
-              localStorage.setItem(
-                "user",
-                JSON.stringify(data["data"].payload["user"])
-              );
-              window.location.href =
-                "http://127.0.0.1:5500/test-frontend/dashboard.html";
+              // localStorage.setItem(
+              //   "user",
+              //   JSON.stringify(data["data"].payload["user"])
+              // );
+              // window.location.href =
+              //   "http://127.0.0.1:5500/test-frontend/dashboard.html";
+              console.log("OK!!");
             } else {
               error.textContent = data["message"];
             }

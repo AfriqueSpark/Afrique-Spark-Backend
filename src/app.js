@@ -5,6 +5,7 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const session = require("express-session");
 const RedisStore = require("connect-redis").default;
@@ -49,6 +50,9 @@ redisClient.connect().catch(console.error);
 let redisStore = new RedisStore({
   client: redisClient,
 });
+
+//Cookie Parser
+app.use(cookieParser(process.env.SESSION_SECRET));
 
 // MANAGE COOKIE SESSIONS
 app.use(
