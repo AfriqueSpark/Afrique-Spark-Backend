@@ -13,16 +13,16 @@
       <p id="users"></p>
     </main>
     <script>
-      let email = document.getElementById("email");
-      let username = document.getElementById("username");
+      // let email = document.getElementById("email");
+      // let username = document.getElementById("username");
       let users = document.getElementById("users");
 
-      const user = JSON.parse(localStorage.getItem("user"));
+      // const user = JSON.parse(localStorage.getItem("user"));
 
-      email.textContent = `YOUR EMAIL IS ${user["user"].email}`;
-      username.textContent = `WELCOME ${user["user"].username}`;
+      // email.textContent = `YOUR EMAIL IS ${user["user"].email}`;
+      // username.textContent = `WELCOME ${user["user"].username}`;
 
-      const URL = "http://localhost:8000/api/v1/users";
+      const URL = "https://afriquespark.onrender.com/api/v1/users";
       async function getUsers() {
         await axios({
           method: "get",
