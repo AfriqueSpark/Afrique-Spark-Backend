@@ -48,6 +48,17 @@
           // Handle successful response
           responseDiv.innerText = "Successfully signed in!";
           console.log(response.data); // You can do further handling here if needed
+
+          if (response.status === 200) {
+            localStorage.setItem(
+              "user",
+              JSON.stringify(response.data["payload"].user)
+            );
+
+            window.location.href = "./dashboard.html";
+          } else {
+            responseDiv.innerText = "Error: " + error.response.data.message;
+          }
         } catch (error) {
           // Handle error
           responseDiv.innerText = "Error: " + error.response.data.message;
