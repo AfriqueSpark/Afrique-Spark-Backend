@@ -25,7 +25,7 @@ function handleGoogleRedirect(req, res) {
   res.status(200).json({
     success: true,
     message: "Successfully signed in with Google.",
-    payload: { user: user },
+    payload: { user },
   });
 }
 
@@ -58,7 +58,7 @@ function handlePasswordSignUpRedirect(req, res) {
   res.status(201).json({
     message: "user registered  successfully",
     success: true,
-    payload: { user: user },
+    payload: { user },
   });
 }
 
@@ -90,7 +90,7 @@ function handlePasswordSignInRedirect(req, res) {
   res.status(200).json({
     message: "Signed in successfully",
     success: true,
-    payload: { user: user },
+    payload: { user },
   });
 }
 
