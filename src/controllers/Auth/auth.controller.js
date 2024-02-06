@@ -13,7 +13,7 @@ new AuthenticationStrategy();
 
 //Controller for google signup/signIn route
 function handleGoogle(req, res, next) {
-  passport.authenticate("google", {
+  return passport.authenticate("google", {
     successRedirect: "google/redirect/success",
   })(req, res, next);
 }
@@ -21,6 +21,8 @@ function handleGoogle(req, res, next) {
 // controller for google redirect
 function handleGoogleRedirect(req, res) {
   const { user } = req;
+
+  console.log(user);
 
   res.status(200).json({
     success: true,
