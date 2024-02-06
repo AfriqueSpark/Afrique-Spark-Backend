@@ -5,7 +5,6 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
-const cookieParser = require("cookie-parser");
 
 const session = require("express-session");
 const RedisStore = require("connect-redis").default;
@@ -30,10 +29,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: [
-      "http://127.0.0.1:5500",
       "http://localhost:5500",
       "http://localhost:3000",
-      "localhost:3000",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
@@ -50,9 +47,6 @@ redisClient.connect().catch(console.error);
 let redisStore = new RedisStore({
   client: redisClient,
 });
-
-//Cookie Parser
-app.use(cookieParser(process.env.SESSION_SECRET));
 
 // MANAGE COOKIE SESSIONS
 app.use(
