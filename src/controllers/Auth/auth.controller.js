@@ -22,7 +22,7 @@ function handleGoogle(req, res, next) {
 function handleGoogleRedirect(req, res) {
   const { user } = req;
 
-  res.status(201).json({
+  res.status(200).json({
     success: true,
     message: "Successfully signed in with Google.",
     payload: { user: user },
