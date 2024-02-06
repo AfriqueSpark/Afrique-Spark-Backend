@@ -28,10 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5500",
-      "http://localhost:3000",
-    ],
+    origin: ["http://localhost:5500", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
@@ -63,7 +60,7 @@ app.use(
       httpOnly: true,
       maxAge: 120 * 60 * 60 * 1000, // expires in five-days
       secure: process.env.NODE_ENV === "development" ? false : true,
-      sameSite: process.env.NODE_ENV === "development" ? false : "none",
+      sameSite: "none",
     },
   })
 );
