@@ -22,7 +22,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5500", "http://localhost:3000"],
+    origin: [
+      "http://localhost:5500",
+      "http://localhost:3000",
+      "https://afriquespark-tsbp.onrender.com",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
