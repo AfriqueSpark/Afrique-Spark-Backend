@@ -62,7 +62,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      maxAge: 120 * 60 * 60 * 1000, // expires in two-days
+      maxAge: 120 * 60 * 60 * 1000, // expires in five-days
       secure: process.env.NODE_ENV === "development" ? false : true,
       sameSite: process.env.NODE_ENV === "development" ? false : "none",
     },
