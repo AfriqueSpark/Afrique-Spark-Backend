@@ -20,12 +20,6 @@ const globalErrorMiddlware = require("./middlewares/error/global.error.middlewar
 
 const app = express();
 
-app.use(express.json());
-
-app.set("trust proxy", 1);
-
-app.use(express.urlencoded({ extended: true }));
-
 app.use(
   cors({
     origin: ["http://localhost:5500", "http://localhost:3000"],
@@ -33,6 +27,12 @@ app.use(
     credentials: true,
   })
 );
+
+app.set("trust proxy", 1);
+
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
 
 //Redis connection client
 const redisClient = redis.createClient({ url: process.env.REDIS_URL });
