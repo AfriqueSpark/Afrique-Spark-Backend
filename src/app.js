@@ -63,8 +63,8 @@ app.use(
     cookie: {
       httpOnly: true,
       maxAge: 120 * 60 * 60 * 1000, // expires in two-days
-      secure: false,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "development" ? false : true,
+      sameSite: process.env.NODE_ENV === "development" ? false : "none",
     },
   })
 );
