@@ -60,7 +60,7 @@ app.use(
       httpOnly: true,
       maxAge: 120 * 60 * 60 * 1000, // expires in five-days
       secure: process.env.NODE_ENV === "development" ? false : true,
-      sameSite: "none",
+      sameSite: process.env.NODE_ENV === "development" ? false : "none",
     },
   })
 );
