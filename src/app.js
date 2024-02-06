@@ -61,7 +61,7 @@ app.use(
       httpOnly: true,
       maxAge: 48 * 60 * 60 * 1000, // expires in two-days
       secure: false,
-      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+      sameSite: false,
     },
   })
 );
