@@ -22,6 +22,8 @@ const app = express();
 
 app.use(express.json());
 
+app.set("trust proxy", 1);
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
@@ -30,6 +32,7 @@ app.use(
       "http://127.0.0.1:5500",
       "http://localhost:5500",
       "http://localhost:3000",
+      "localhost:3000",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
@@ -61,7 +64,7 @@ app.use(
       httpOnly: true,
       maxAge: 120 * 60 * 60 * 1000, // expires in two-days
       secure: false,
-      sameSite: false,
+      sameSite: "none",
     },
   })
 );
