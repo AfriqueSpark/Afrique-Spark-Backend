@@ -134,31 +134,6 @@
       email.textContent = `YOUR EMAIL IS ${user.email}`;
       username.textContent = `WELCOME ${user.username}`;
 
-      // const URL = "https://afriquespark.onrender.com/api/v1/users";
-      // async function getUsers() {
-      //   await axios({
-      //     method: "get",
-      //     url: URL,
-      //     withCredentials: true,
-      //   })
-      //     .then((data) => {
-      //       // const userData = await data.json();
-
-      //       console.log(data);
-
-      //       if (data.status === 200) {
-      //         users.textContent = JSON.stringify(data["data"]);
-      //       } else {
-      //         users.textContent = data["message"];
-      //       }
-      //     })
-      //     .catch((err) => {
-      //       console.log(err);
-      //     });
-      // }
-
-      // getUsers();
-
       document
         .getElementById("productUploadForm")
         .addEventListener("submit", function (event) {
@@ -167,7 +142,7 @@
 
           axios
             .post(
-              "http://localhost:8000/api/v1/vendor/upload-product",
+              "https://afriquespark.onrender.com/api/v1/vendor/upload-product",
               formData,
               { withCredentials: true }
             )
