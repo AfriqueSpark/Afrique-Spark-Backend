@@ -17,7 +17,7 @@ const logger = require("./utils/logger");
 const authRoute = require("./routes/Auth/auth.route");
 const isAuthenticated = require("./middlewares/checkAuthentication");
 const globalErrorMiddlware = require("./middlewares/error/global.error.middleware");
-const productRoute = require("./routes/Products/uploadProduct.route");
+const productRoute = require("./routes/Products/product.route");
 
 const app = express();
 
