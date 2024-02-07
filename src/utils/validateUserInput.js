@@ -25,4 +25,22 @@ function validateEmailPasswordInput(user) {
   return schema.validate(user, joiOptions);
 }
 
-module.exports = { validateEmailPasswordInput, validateSignUpInput };
+// VALIDATE USER INPUT FOR SIGN-UP
+function validateProductUpload(product) {
+  // Validate user request inputs, min password length is 8
+  const schema = Joi.object({
+    productName: Joi.string().required(),
+    productDetails: Joi.string().required(),
+    productPrice: Joi.number().required(),
+    vendorName: Joi.string().min(5).max(30).required(),
+    vendorAddress: Joi.string().required(),
+  });
+
+  return schema.validate(product, joiOptions);
+}
+
+module.exports = {
+  validateEmailPasswordInput,
+  validateSignUpInput,
+  validateProductUpload,
+};
