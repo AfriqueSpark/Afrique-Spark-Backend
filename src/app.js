@@ -16,8 +16,10 @@ const { userRoute } = require("./routes/user.route");
 const logger = require("./utils/logger");
 const authRoute = require("./routes/Auth/auth.route");
 const isAuthenticated = require("./middlewares/checkAuthentication");
-const globalErrorMiddlware = require("./middlewares/error/global.error.middleware");
+const globalErrorMiddleware = require("./middlewares/error/global.error.middleware");
 const productRoute = require("./routes/Products/product.route");
+const vendorRoute = require("./routes/Products/vendor.route");
+const cartRoute = require("./routes/Cart/cart.route");
 
 const app = express();
 
@@ -95,13 +97,19 @@ app.get("/api/v:version", checkApiVersion, welcomeToApi);
 //AUTH ROUTES
 app.use("/api/v:version/auth", checkApiVersion, authRoute);
 
-//VENDOR ROUTES
+//PRODUCT ROUTES
 app.use(
-  "/api/v:version/vendor",
+  "/api/v:version/products",
   checkApiVersion,
   isAuthenticated,
   productRoute
 );
+
+//CART ROUTES
+app.use("/api/v:version/cart", checkApiVersion, isAuthenticated, cartRoute);
+
+//VENDOR ROUTES
+app.use("/api/v:version/vendor", checkApiVersion, isAuthenticated, vendorRoute);
 
 //USER'S ROUTES
 app.use("/api/v:version/users", checkApiVersion, isAuthenticated, userRoute);
@@ -114,6 +122,6 @@ app.all("*", (_, res) => {
 });
 
 //GLOBAL ERROR HANDLER MIDDLEWARE
-app.use(globalErrorMiddlware);
+app.use(globalErrorMiddleware);
 
 module.exports = { app, redisClient };

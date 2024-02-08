@@ -1,4 +1,5 @@
 const Joi = require("joi");
+
 const joiOptions = require("../config/joi.config");
 
 // VALIDATE USER INPUT FOR SIGN-UP
@@ -39,8 +40,25 @@ function validateProductUpload(product) {
   return schema.validate(product, joiOptions);
 }
 
+// VALIDATE USER INPUT FOR SIGN-UP
+function validateAddToCart(cart) {
+  // Validate user request inputs, min password length is 8
+  const schema = Joi.object({
+    productId: Joi.string()
+      .regex(/^[0-9a-fA-F]{24}$/)
+      .message("must be an oid")
+      .required(),
+    quantity: Joi.number().required(),
+  });
+
+  return schema.validate(cart, joiOptions);
+}
+
+// .regex(/^[0-9a-fA-F]{24}$/, message)
+
 module.exports = {
   validateEmailPasswordInput,
   validateSignUpInput,
   validateProductUpload,
+  validateAddToCart,
 };
