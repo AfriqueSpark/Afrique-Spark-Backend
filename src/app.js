@@ -19,6 +19,7 @@ const isAuthenticated = require("./middlewares/checkAuthentication");
 const globalErrorMiddleware = require("./middlewares/error/global.error.middleware");
 const productRoute = require("./routes/Products/product.route");
 const vendorRoute = require("./routes/Products/vendor.route");
+const cartRoute = require("./routes/Cart/cart.route");
 
 const app = express();
 
@@ -103,6 +104,9 @@ app.use(
   isAuthenticated,
   productRoute
 );
+
+//CART ROUTES
+app.use("/api/v:version/cart", checkApiVersion, isAuthenticated, cartRoute);
 
 //VENDOR ROUTES
 app.use("/api/v:version/vendor", checkApiVersion, isAuthenticated, vendorRoute);
