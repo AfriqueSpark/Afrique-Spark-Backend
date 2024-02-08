@@ -9,6 +9,7 @@
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
+        position: relative; /* Added to position the cart icon */
       }
       .container {
         max-width: 800px;
@@ -26,15 +27,62 @@
         max-width: 200px;
         margin-right: 20px;
       }
+      /* Added cart icon styles */
+      .cart-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+      }
+      .cart-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        max-width: 400px;
+        display: none;
+      }
+      .cart-container.show {
+        display: block;
+      }
+      /* Added quantity controls styles */
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+      }
+      .quantity-controls button {
+        padding: 5px 10px;
+        margin: 0 5px;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
-    <a href="./dashboard.html"> GO TO DASHBOARD</a>
     <div class="container">
       <div id="product-list"></div>
     </div>
 
+    <!-- Cart icon -->
+    <div class="cart-icon" id="cart-icon">
+      <img src="./shopping-cart.webp" width="40px" height="40px" alt="Cart" />
+    </div>
+
+    <!-- Cart container -->
+    <div class="cart-container" id="cart-container">
+      <h2>Cart</h2>
+      <ul id="cart-items"></ul>
+      <p id="subtotal"></p>
+    </div>
+
     <script>
+      // Render product cards
+      const productContainer = document.getElementById("product-list");
+
       // Fetch product data from the API
       fetch("https://afriquespark.onrender.com/api/v1/products", {
         credentials: "include",
@@ -45,23 +93,112 @@
 
           const payload = data.payload;
 
-          // Create a product card for each product
           payload.forEach((product) => {
             const productCard = `
-          <div class="product">
-            <img src="${product.photo}" alt="${product.name}">
-            <div>
-              <h2>${product.name}</h2>
-              <p>${product.productDetails}</p>
-              <p>Price: ${product.price}</p>
-              <p>Vendor: ${product.vendorName}</p>
-              <p>Address: ${product.vendorAddress}</p>
-            </div>
-          </div>`;
-            document.getElementById("product-list").innerHTML += productCard;
+      <div class="product">
+        <img src="${product.photo}" alt="${product.name}">
+        <div>
+          <h2>${product.name}</h2>
+          <p>${product.productDetails}</p>
+          <div class="quantity-controls">
+            <button onclick="decreaseQuantity('${product._id}')">-</button>
+            <input type="number" id="quantity-${product._id}" value="1" min="1">
+            <button onclick="increaseQuantity('${product._id}')">+</button>
+          </div>
+          <button onclick="addToCart('${product._id}')">Add to Cart</button>
+        </div>
+      </div>
+    `;
+            productContainer.innerHTML += productCard;
           });
+        });
+
+      // Function to add product to cart
+      function addToCart(productId) {
+        const quantity = document.getElementById(`quantity-${productId}`).value;
+        // Make POST request to add product to cart
+        fetch(`https://afriquespark.onrender.com/api/v1/cart/addToCart`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId: productId,
+            quantity: quantity,
+          }),
         })
-        .catch((error) => console.error("Error fetching data:", error));
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to add product to cart");
+            }
+            console.log("Product added to cart successfully");
+          })
+          .catch((error) => {
+            console.error("Error adding product to cart:", error);
+          });
+      }
+
+      // Function to increase quantity
+      function increaseQuantity(productId) {
+        const quantityInput = document.getElementById(`quantity-${productId}`);
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+      }
+
+      // Function to decrease quantity
+      function decreaseQuantity(productId) {
+        const quantityInput = document.getElementById(`quantity-${productId}`);
+        if (parseInt(quantityInput.value) > 1) {
+          quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+      }
+
+      //Function to display cart
+      function displayCart() {}
+
+      // Event listener for cart icon click
+      document
+        .getElementById("cart-icon")
+        .addEventListener("click", function () {
+          // Make API call to fetch products in the cart
+          fetch("https://afriquespark.onrender.com/api/v1/cart/getCart", {
+            credentials: "include",
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Failed to fetch cart");
+              }
+              return response.json();
+            })
+            .then((response) => {
+              // Display cart products in the cart container
+              const cartItemsList = document.getElementById("cart-items");
+              cartItemsList.innerHTML = ""; // Clear previous items
+              let cartProducts = response.payload["cart"];
+              let products = cartProducts[0].products;
+
+              // console.log(response.payload);
+
+              products.forEach((cartProduct) => {
+                // console.log(cartProduct.name);
+                const cartItem = document.createElement("li");
+                cartItem.textContent = `${cartProduct.name} - N${cartProduct.price} ${cartProduct.quantity}X`; // Include price
+                cartItemsList.appendChild(cartItem);
+              });
+
+              // Display subtotal
+              const subtotalElement = document.getElementById("subtotal");
+              subtotalElement.textContent = `Subtotal: N${cartProducts[0].totalPrice}`;
+
+              // Show the cart container
+              document
+                .getElementById("cart-container")
+                .classList.toggle("show");
+            })
+            .catch((error) => {
+              console.error("Error fetching cart:", error);
+            });
+        });
     </script>
   </body>
 </html>
