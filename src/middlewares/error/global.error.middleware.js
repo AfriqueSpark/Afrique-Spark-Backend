@@ -9,7 +9,7 @@ function duplicateFieldDB(err) {
 }
 
 function sendDevErrors(err, res) {
-  res.status(err.statusCode).json({
+  res.status(err.statusCode || 500).json({
     success: err.success,
     message: err.message,
     error: err,
@@ -36,7 +36,7 @@ function sendProdErrors(err, res) {
     ];
 }
 
-const globalErrorMiddlware = (err, req, res, next) => {
+const globalErrorMiddleware = (err, req, res, next) => {
   if (process.env.NODE_ENV === "development") {
     sendDevErrors(err, res);
   } else if (process.env.NODE_ENV === "production") {
@@ -48,4 +48,4 @@ const globalErrorMiddlware = (err, req, res, next) => {
   }
 };
 
-module.exports = globalErrorMiddlware;
+module.exports = globalErrorMiddleware;
