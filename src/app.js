@@ -29,6 +29,8 @@ app.use(
       "http://localhost:5500",
       "http://localhost:3000",
       "https://afriquespark-tsbp.onrender.com",
+      "https://localhost:5500",
+      "https://localhost:3000",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
