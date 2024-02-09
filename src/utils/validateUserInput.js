@@ -54,6 +54,17 @@ function validateAddToCart(cart) {
   return schema.validate(cart, joiOptions);
 }
 
+// VALIDATE USER ROLE UPDATE
+function validateUserRoleUpdate(user) {
+  const schema = Joi.object({
+    role: Joi.string().required(),
+    address: Joi.string().min(8).required(),
+    phoneNumber: Joi.string().min(11).max(14),
+  });
+
+  return schema.validate(user, joiOptions);
+}
+
 // .regex(/^[0-9a-fA-F]{24}$/, message)
 
 module.exports = {
@@ -61,4 +72,5 @@ module.exports = {
   validateSignUpInput,
   validateProductUpload,
   validateAddToCart,
+  validateUserRoleUpdate,
 };

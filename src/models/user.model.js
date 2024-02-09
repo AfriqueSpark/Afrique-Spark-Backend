@@ -34,7 +34,7 @@ const userSchema = new schema({
     enum: ["user", "model", "vendor"],
     default: "user",
   },
-  Address: {
+  address: {
     type: String,
     default: "No Address",
   },
