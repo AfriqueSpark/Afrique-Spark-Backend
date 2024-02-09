@@ -31,7 +31,7 @@ const userSchema = new schema({
   },
   role: {
     type: String,
-    enum: ["user", "model", "fashion-designers"],
+    enum: ["user", "model", "vendors"],
     default: "user",
   },
   createdAt: {
