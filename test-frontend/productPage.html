@@ -63,6 +63,8 @@
     </style>
   </head>
   <body>
+    <a href="./dashboard.html">GO TO DASHBOARD</a>
+    <h2 id="message"></h2>
     <div class="container">
       <div id="product-list"></div>
     </div>
@@ -132,6 +134,10 @@
             if (!response.ok) {
               throw new Error("Failed to add product to cart");
             }
+
+            document.getElementById("message").textContent =
+              "Product added to cart successfully";
+
             console.log("Product added to cart successfully");
           })
           .catch((error) => {
