@@ -34,6 +34,14 @@ const userSchema = new schema({
     enum: ["user", "model", "vendor"],
     default: "user",
   },
+  Address: {
+    type: String,
+    default: "No Address",
+  },
+  phoneNumber: {
+    type: String,
+    default: "000",
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
