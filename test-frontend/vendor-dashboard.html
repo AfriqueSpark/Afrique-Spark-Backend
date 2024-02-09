@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendor Dashboard</title>
+    <style>
+      /* Basic styling */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 0 20px;
+      }
+      .product {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .product img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="./vendor-dashboard.html">UPLOAD PRODUCT</a>
+    <a href="./productPage.html">GO TO PRODUCT PAGE</a>
+    <div class="container">
+      <h1>Vendor Dashboard</h1>
+      <h2>My Products</h2>
+      <div id="products-container"></div>
+    </div>
+
+    <script>
+      // Function to fetch products from API and display them
+      async function fetchProducts() {
+        try {
+          const response = await fetch(
+            "https://afriquespark.onrender.com/api/v1/vendor/products?fields=name,photo,price",
+            { method: "GET", credentials: "include" }
+          );
+          const data = await response.json();
+
+          const products = data.payload;
+
+          const productsContainer =
+            document.getElementById("products-container");
+
+          // Clear previous products
+          productsContainer.innerHTML = "";
+
+          // Loop through products and display them
+          products.forEach((product) => {
+            const productDiv = document.createElement("div");
+            productDiv.classList.add("product");
+
+            const productName = document.createElement("h2");
+            productName.textContent = product.name;
+
+            const productPrice = document.createElement("p");
+            productPrice.textContent = `Price: N${product.price}`;
+
+            const productImage = document.createElement("img");
+            productImage.src = product.photo;
+            productImage.alt = product.name;
+
+            productDiv.appendChild(productName);
+            productDiv.appendChild(productImage);
+            productDiv.appendChild(productPrice);
+
+            productsContainer.appendChild(productDiv);
+          });
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
+      }
+
+      // Call the function to fetch and display products when the page loads
+      fetchProducts();
+    </script>
+  </body>
+</html>
