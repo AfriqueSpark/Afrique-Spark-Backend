@@ -68,10 +68,7 @@ function validateUserRoleUpdate(user) {
 //Validate ids to delete products
 function validateIds(ids) {
   const schema = Joi.object({
-    productIds: Joi.array()
-      .regex(/^[0-9a-fA-F]{24}$/)
-      .message("must be an oid")
-      .required(),
+    productIds: Joi.array().required(),
   });
 
   return schema.validate(ids, joiOptions);
