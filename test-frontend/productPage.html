@@ -138,6 +138,10 @@
             document.getElementById("message").textContent =
               "Product added to cart successfully";
 
+            setTimeout(() => {
+              message.textContent = "";
+            }, 2000);
+
             console.log("Product added to cart successfully");
           })
           .catch((error) => {
