@@ -11,6 +11,7 @@ const {
 const {
   getVendorProducts,
 } = require("../../controllers/Products/getProducts.controller");
+const deleteVendorProducts = require("../../controllers/Products/deleteProducts");
 
 // Setting up multer as a middleware to grab photo uploads
 const storage = multer.memoryStorage();
@@ -21,6 +22,6 @@ router
   .route("/upload-product")
   .post(upload.single("productImage"), uploadProduct);
 
-router.route("/products").get(getVendorProducts);
+router.route("/products").get(getVendorProducts).delete(deleteVendorProducts);
 
 module.exports = router;
