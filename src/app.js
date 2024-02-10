@@ -25,19 +25,21 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*",
+    origin: [
+      "http://localhost:5500",
+      "http://localhost:3000",
+      "https://afriquespark-tsbp.onrender.com",
+      "https://localhost:5500",
+      "https://localhost:3000",
+      "https://localhost:5173",
+      "https://localhost:8080",
+      "http://localhost:5173",
+      "http://localhost:8080",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
 );
-
-// [
-//   "http://localhost:5500",
-//   "http://localhost:3000",
-//   "https://afriquespark-tsbp.onrender.com",
-//   "https://localhost:5500",
-//   "https://localhost:3000",
-// ]
 
 app.set("trust proxy", 1);
 
