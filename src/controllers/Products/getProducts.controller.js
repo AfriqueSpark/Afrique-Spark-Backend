@@ -30,7 +30,7 @@ const getVendorProducts = async (req, res, next) => {
 
     const product = await features.query;
 
-    if (!product) {
+    if (!product || product.length === 0) {
       return res.status(200).json({
         success: true,
         message: "You have no products uploaded yet",
