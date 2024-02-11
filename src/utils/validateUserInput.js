@@ -75,6 +75,15 @@ function validateIds(ids) {
 }
 // .regex(/^[0-9a-fA-F]{24}$/, message)
 
+function validateProductId(id) {
+  const schema = Joi.string()
+    .regex(/^[0-9a-fA-F]{24}$/)
+    .message("must be an oid")
+    .required();
+
+  return schema.validate(id, joiOptions);
+}
+
 module.exports = {
   validateEmailPasswordInput,
   validateSignUpInput,
@@ -82,4 +91,5 @@ module.exports = {
   validateAddToCart,
   validateUserRoleUpdate,
   validateIds,
+  validateProductId,
 };

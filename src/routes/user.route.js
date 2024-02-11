@@ -1,5 +1,7 @@
 const express = require("express");
 
+const { isRestrictedTo } = require("../middlewares/roleAuth.middleware");
+
 const userRoute = express.Router();
 
 const {
@@ -9,7 +11,10 @@ const {
   updateRole,
 } = require("../controllers/user.controller");
 
-userRoute.route("/").get(getUserData).post(createUser).delete(deleteUsers);
 userRoute.route("/update-role").put(updateRole);
+
+userRoute.use(isRestrictedTo("admin"));
+
+userRoute.route("/").get(getUserData).post(createUser).delete(deleteUsers);
 
 module.exports = { userRoute };
