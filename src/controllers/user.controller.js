@@ -70,11 +70,16 @@ const updateRole = async (req, res, next) => {
   const { error } = validateUserRoleUpdate(req.body);
 
   if (error) {
-    return next(new errorHandler(400, error));
+    const errorMessage = error.details[0].message.replace(/"/g, ""); // strip out quotes
+    return next(new errorHandler(400, errorMessage));
   }
 
   try {
     const { role, address, phoneNumber } = req.body;
+
+    if (role !== "vendor") {
+      return next(new errorHandler(400, "Role to update to must be vendor"));
+    }
 
     const updatedUser = await user.findByIdAndUpdate(
       req.user._id,
