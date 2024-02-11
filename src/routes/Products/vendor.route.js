@@ -12,11 +12,14 @@ const {
   getVendorProducts,
 } = require("../../controllers/Products/getProducts.controller");
 const deleteVendorProducts = require("../../controllers/Products/deleteProducts");
+const { isRestrictedTo } = require("../../middlewares/roleAuth.middleware");
 
 // Setting up multer as a middleware to grab photo uploads
 const storage = multer.memoryStorage();
 
 const upload = multer({ storage: storage });
+
+router.use(isRestrictedTo("vendor", "admin"));
 
 router
   .route("/upload-product")

@@ -6,24 +6,28 @@ const deleteVendorProducts = async (req, res, next) => {
   const { error } = validateIds(req.body);
 
   if (error) {
-    return res.status(400).json({ success: false, message: error });
+    const errorMessage = error.details[0].message.replace(/"/g, ""); // strip out quotes
+    return res.status(400).json({ success: false, message: errorMessage });
   }
   try {
     const { productIds } = req.body;
 
-    const products = await productModel.find({ vendorId: req.user._id });
-
-    if (!products || products.length === 0) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Products not found" });
-    }
-
-    await productModel.deleteMany({ _id: { $in: productIds } });
-
-    return res
-      .status(200)
-      .json({ success: true, message: "Products deleted successfully" });
+    await productModel
+      .deleteMany({ _id: { $in: productIds }, vendorId: req.user._id })
+      .then((result) => {
+        if (result.deletedCount === 0) {
+          return res.status(404).json({
+            success: false,
+            message:
+              "No products belonging to the vendor were found to delete.",
+          });
+        } else {
+          return res.status(200).json({
+            success: true,
+            message: `${result.deletedCount} products deleted successfully.`,
+          });
+        }
+      });
   } catch (err) {
     console.log(err);
     next(new errorHandler(500, "Failed to delete products"));

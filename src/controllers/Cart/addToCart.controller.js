@@ -10,7 +10,8 @@ const addToCart = async (req, res, next) => {
   const { error } = validateAddToCart(req.body);
 
   if (error) {
-    return next(new errorHandler(400, error));
+    const errorMessage = error.details[0].message.replace(/"/g, ""); // strip out quotes
+    return next(new errorHandler(400, errorMessage));
   }
 
   try {

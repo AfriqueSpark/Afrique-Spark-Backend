@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
   vendorId: {
     type: mongoose.Types.ObjectId,
+    ref: "Users",
     required: [true, "Vendor id not provided"],
   },
   name: {
