@@ -6,7 +6,8 @@ const deleteVendorProducts = async (req, res, next) => {
   const { error } = validateIds(req.body);
 
   if (error) {
-    return res.status(400).json({ success: false, message: error });
+    const errorMessage = error.details[0].message.replace(/"/g, ""); // strip out quotes
+    return res.status(400).json({ success: false, message: errorMessage });
   }
   try {
     const { productIds } = req.body;
@@ -21,12 +22,10 @@ const deleteVendorProducts = async (req, res, next) => {
               "No products belonging to the vendor were found to delete.",
           });
         } else {
-          return res
-            .status(200)
-            .json({
-              success: true,
-              message: `${result.deletedCount} products deleted successfully.`,
-            });
+          return res.status(200).json({
+            success: true,
+            message: `${result.deletedCount} products deleted successfully.`,
+          });
         }
       });
   } catch (err) {
