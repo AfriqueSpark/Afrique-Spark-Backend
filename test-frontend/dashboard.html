@@ -149,11 +149,13 @@
             )
             .then(function (response) {
               console.log("Product uploaded successfully!", response);
+              alert(response.payload["message"]);
               // You can handle success behavior here
             })
             .catch(function (error) {
               console.error("Error uploading product:", error);
               // You can handle error behavior here
+              alert(error["message"]);
             });
         });
     </script>
