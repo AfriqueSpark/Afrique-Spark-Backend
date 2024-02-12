@@ -1,7 +1,9 @@
 const productModel = require("../../models/product.model");
 const ApiFeatures = require("../../utils/ApiFeatures");
+const errorHandler = require("../../utils/error.handler.class");
+const { validateProductId } = require("../../utils/validateUserInput");
 
-const getProducts = async (req, res, next) => {
+const getAllProducts = async (req, res, next) => {
   try {
     const features = new ApiFeatures(
       productModel.find(),
@@ -14,6 +16,34 @@ const getProducts = async (req, res, next) => {
       success: true,
       results: product.length,
       message: "Products fetched successfully",
+      payload: product,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getProduct = async (req, res, next) => {
+  const { productId } = req.params;
+
+  const { error } = validateProductId(productId);
+
+  if (error) {
+    const errorMessage = error.details[0].message.replace(/"/g, ""); // strip out quotes
+    return next(new errorHandler(400, errorMessage));
+  }
+
+  try {
+    const features = new ApiFeatures(
+      productModel.find({ _id: productId }),
+      req.query
+    ).limitFields();
+
+    const product = await features.query;
+
+    res.status(200).json({
+      success: true,
+      message: "Product fetched successfully",
       payload: product,
     });
   } catch (err) {
@@ -48,4 +78,4 @@ const getVendorProducts = async (req, res, next) => {
   }
 };
 
-module.exports = { getProducts, getVendorProducts };
+module.exports = { getAllProducts, getVendorProducts, getProduct };
