@@ -35,6 +35,7 @@ app.use(
       "https://localhost:8080",
       "http://localhost:5173",
       "http://localhost:8080",
+      "https://afrique-spark.onrender.com"
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
