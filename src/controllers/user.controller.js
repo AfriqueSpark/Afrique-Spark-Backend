@@ -75,15 +75,11 @@ const updateRole = async (req, res, next) => {
   }
 
   try {
-    const { role, address, phoneNumber } = req.body;
-
-    if (role !== "vendor") {
-      return next(new errorHandler(400, "Role to update to must be vendor"));
-    }
+    const { address, phoneNumber } = req.body;
 
     const updatedUser = await user.findByIdAndUpdate(
       req.user._id,
-      { role, address, phoneNumber, updatedAt: Date.now() },
+      { role: "vendor", address, phoneNumber, updatedAt: Date.now() },
       { new: true, runValidators: true }
     );
 
