@@ -57,7 +57,6 @@ function validateAddToCart(cart) {
 // VALIDATE USER ROLE UPDATE
 function validateUserRoleUpdate(user) {
   const schema = Joi.object({
-    role: Joi.string().required(),
     address: Joi.string().min(8).required(),
     phoneNumber: Joi.string().min(11).max(14),
   });
