@@ -35,7 +35,7 @@ app.use(
       "https://localhost:8080",
       "http://localhost:5173",
       "http://localhost:8080",
-      "https://afrique-spark.onrender.com"
+      "https://afrique-spark.onrender.com",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
@@ -74,7 +74,7 @@ app.use(
       httpOnly: true,
       maxAge: 120 * 60 * 60 * 1000, // expires in five-days
       secure: process.env.NODE_ENV === "development" ? false : true,
-      sameSite: process.env.NODE_ENV === "development" ? false : "none",
+      sameSite: process.env.NODE_ENV === "development" ? false : "lax",
     },
   })
 );
